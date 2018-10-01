@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Current Time</title>
+</head>
+<body>
+
+    {% if current_time %}   
+        <p>Current date and time is {{ current_time }}</p>
+    {% else %}               
+        <p>current_time variable is not available</p>
+    {% endif %}
+
+</body>
+</html>
