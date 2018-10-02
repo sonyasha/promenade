@@ -25,7 +25,7 @@ class Walk(models.Model):
     updated_by = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name='+')
     district = models.ManyToManyField(District, help_text='Select a District(s)')
     subdistrict = models.ManyToManyField(Subdistrict, help_text='Select a Subdistrict(s)')
-    #slug = models.SlugField(max_length=50, unique=True)'
+    slug = models.SlugField(max_length=50, unique=True)
 
     def __str__(self):
         return self.name
