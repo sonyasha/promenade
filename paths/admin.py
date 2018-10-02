@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import District, Subdistrict, Walk, Comment
 
-# Register your models here.
+admin.site.register(District)
+admin.site.register(Subdistrict)
+admin.site.register(Walk)
+admin.site.register(Comment)
