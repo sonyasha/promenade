@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'paths',
+    'leaflet',
+    'djgeojson',
 ]
 
 MIDDLEWARE = [
@@ -126,3 +128,22 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+LEAFLET_CONFIG = {
+    # 'SPATIAL_EXTENT': (-77.15, 38.97, -76.9, 38.82),
+    'DEFAULT_CENTER': (38.9, -77.03),
+    'DEFAULT_ZOOM': 12,
+    'MIN_ZOOM': 2,
+    'MAX_ZOOM': 18,
+    # 'TILES': 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    'TILES': [
+        ('Street Map', 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {'attribution': '&copy; Wikimedia Maps'}),
+        ('OSM', 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {'attribution': '&copy; openstreetmap'}),
+        ('Black & White', 'http://a.tile.stamen.com/toner/{z}/{x}/{y}.png', {'attribution': '&copy; Stamen Toner'}),
+        ('Aqua', 'http://c.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg', {'attribution': '&copy; Stamen Watercolor'}),
+    ],
+    'SCALE': 'both',
+    # 'MINIMAP': True,
+    'RESET_VIEW': False,
+    # 'FORCE_IMAGE_PATH': True,
+}

@@ -15,6 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.views.generic import TemplateView
+
+from djgeojson.views import GeoJSONLayerView
+from paths.models import GeoWalk, SinglePoint
 
 
 
@@ -22,6 +26,9 @@ urlpatterns = [
     # path('', views.home, name='home'), #add index page
     path('districts/', include('paths.urls')),
     path('admin/', admin.site.urls),
+    path('map/', TemplateView.as_view(template_name='paths/map.html'), name='map'),
+    path('mapdata/', GeoJSONLayerView.as_view(model=GeoWalk, properties=('title', 'description', 'picture_url')), name='mapdata'),
+    path('pointsdata/', GeoJSONLayerView.as_view(model=SinglePoint, properties=('description')), name='pointsdata'),
     
 ]
 
