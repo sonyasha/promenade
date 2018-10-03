@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Subdistricts</title>
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    </head>
+    <body>
+        <div class="container">
+            <ol class="breadcrumb my-5">
+                <li class="breadcrumb-item">Districts</li>
+                <li class="breadcrumb-item active">{{ district.name }}</li>
+            </ol>
+
+            <!-- <table class="table">
+                <tr>
+                    {% for d in first_two %}
+                        <td class="align-middle">{{d.name}}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    {% for d in second_two %}
+                        <td class="align-middle">{{d.name}}</td>
+                    {% endfor %}
+                </tr>
+            </table> -->
+
+        </div>
+        
+    </body>
+</html>
