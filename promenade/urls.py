@@ -17,8 +17,10 @@ from django.contrib import admin
 from django.urls import include, path
 
 
+
 urlpatterns = [
-    path('paths/', include('paths.urls')),
+    # path('', views.home, name='home'), #add index page
+    path('districts/', include('paths.urls')),
     path('admin/', admin.site.urls),
     
 ]
