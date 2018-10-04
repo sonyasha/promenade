@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'paths',
     'leaflet',
     'djgeojson',
+    'gm2m',
 ]
 
 MIDDLEWARE = [

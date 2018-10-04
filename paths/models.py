@@ -1,11 +1,13 @@
 from djgeojson.fields import MultiLineStringField
 from djgeojson.fields import PointField
-# from djgeojson.fields import GeometryCollectionField
+from djgeojson.fields import PolygonField
+from gm2m import GM2MField
 
 from django.db import models
 from django.contrib.auth.models import User
 
 from promenade.utils import unique_slug_generator
+from promenade.utils import define_neighborhood_single_point
 # from django.utils.text import slugify
 
 class District(models.Model):
@@ -64,25 +66,46 @@ class Comment(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     updated_at = models.DateTimeField(null=True)
 
-class SinglePoint(models.Model):
-    description = models.CharField(max_length=100)
-    geom = PointField()
+class Neighborhood(models.Model):
+    ''' DC neighborhood areas, 5 constant '''
+    name = models.CharField(max_length=15)
+    coordinates = models.TextField(null=True)
+    # geom = PolygonField()
+    slug = models.SlugField(max_length=20, unique=True)
 
     def __str__(self):
-        return self.description
+        return self.name
+
+
+class SinglePoint(models.Model):
+    ''' A single point that can be placed on a map '''
+    name = models.CharField(max_length=100)
+    geom = PointField()
+    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        # super().save(*args, **kwargs)
+        define_neighborhood_single_point(self, Neighborhood)
+        super().save(*args, **kwargs)
 
 
 class GeoWalk(models.Model):
-
-    title = models.CharField(max_length=50)
+    ''' A single walk  that can be placed on a map '''
+    name = models.CharField(max_length=50)
     description = models.TextField(max_length=100)
     # picture = models.ImageField(null=True)
     geom = MultiLineStringField()
+    neighborhood = models.ManyToManyField(Neighborhood, null=True)
     
 
-    def __unicode__(self):
-        return self.title
+    def __str__(self):
+        return self.name
 
     # @property
     # def picture_url(self):
     #     return self.picture.url
+
+
