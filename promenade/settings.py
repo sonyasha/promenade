@@ -147,4 +147,9 @@ LEAFLET_CONFIG = {
     # 'MINIMAP': True,
     'RESET_VIEW': False,
     # 'FORCE_IMAGE_PATH': True,
+    'PLUGINS': {
+        'forms': {
+            'auto-include': True
+        }
+    }
 }

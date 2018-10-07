@@ -24,7 +24,7 @@ from paths.models import GeoWalk, SinglePoint, Neighborhood
 
 urlpatterns = [
     # path('', views.home, name='home'), #add index page
-    # path('districts/', include('paths.urls')),
+    path('districts/', include('paths.urls')),
     path('admin/', admin.site.urls),
     path('map/', TemplateView.as_view(template_name='paths/map.html'), name='map'),
     path('mapdata/', GeoJSONLayerView.as_view(model=GeoWalk, properties=('name', 'description', 'picture_url')), name='mapdata'),
