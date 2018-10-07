@@ -1,6 +1,5 @@
-from djgeojson.fields import MultiLineStringField
-from djgeojson.fields import PointField
-from djgeojson.fields import PolygonField
+from djgeojson.fields import MultiLineStringField, PointField, PolygonField, LineStringField
+
 # from gm2m import GM2MField
 from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
@@ -56,7 +55,8 @@ class GeoWalk(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField(max_length=100)
     # picture = models.ImageField(null=True)
-    geom = MultiLineStringField()
+    geom = LineStringField()
+    # geom = MultiLineStringField()
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     checked = models.BooleanField(null=True)
@@ -67,15 +67,12 @@ class GeoWalk(models.Model):
     duration_in_seconds = models.IntegerField(validators=[MaxValueValidator(86400)], null=True, blank=True)
     duration_text = models.CharField(max_length=100, null=True, blank=True)
 
-    # length = models.DecimalField(decimal_places=1, max_digits=4, null=True, blank=True)
-    # duration = models.DecimalField(decimal_places=1, max_digits=4, null=True, blank=True)
-
     def add_neighborhoods(self):
         if not self.checked:
             for n in Neighborhood.objects.all():
                 polygon = Polygon(*(n.geom['coordinates']))
-                for coord_pair in self.geom['coordinates'][0]:
-                    point = Point(*(coord_pair))
+                for coord_pair in self.geom['coordinates']:
+                    point = Point(coord_pair)
                     if polygon.contains(point):
                         self.neighborhood.add(n)
                         self.checked = True
@@ -83,22 +80,23 @@ class GeoWalk(models.Model):
                         break
 
     def find_length_duration(self):
-        gmaps = googlemaps.Client(key=gm_key)
-        start = f'{self.geom["coordinates"][0][0][1]}, {self.geom["coordinates"][0][0][0]}'
-        end = f'{self.geom["coordinates"][0][-1][1]}, {self.geom["coordinates"][0][-1][0]}'
-        try:
-            results = gmaps.distance_matrix(f'{start}, {end}', mode="walking")
-            if results:
-                try:
-                    self.length_in_meters = results['rows'][0]['elements'][0]['distance']['value']
-                    self.length_text = results['rows'][0]['elements'][0]['distance']['text']
-                    self.duration_in_seconds = results['rows'][0]['elements'][0]['duration']['value']
-                    self.duration_text = results['rows'][0]['elements'][0]['duration']['text']
-                    self.save()
-                except:
-                    print('the walk is too long')
-        except:
-            print('limit is over')               
+        if not self.length_in_meters:
+            gmaps = googlemaps.Client(key=gm_key)
+            start = f'{self.geom["coordinates"][0][0][1]}, {self.geom["coordinates"][0][0][0]}'
+            end = f'{self.geom["coordinates"][0][-1][1]}, {self.geom["coordinates"][0][-1][0]}'
+            try:
+                results = gmaps.distance_matrix(f'{start}, {end}', mode="walking")
+                if results:
+                    try:
+                        self.length_in_meters = results['rows'][0]['elements'][0]['distance']['value']
+                        self.length_text = results['rows'][0]['elements'][0]['distance']['text']
+                        self.duration_in_seconds = results['rows'][0]['elements'][0]['duration']['value']
+                        self.duration_text = results['rows'][0]['elements'][0]['duration']['text']
+                        self.save()
+                    except:
+                        print('the walk is too long')
+            except:
+                print('limit is over')               
 
     def __str__(self):
         return self.name
