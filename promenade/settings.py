@@ -37,10 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     'paths',
+    'users',
+
+    'widget_tweaks',
     'leaflet',
     'djgeojson',
-    'gm2m',
+    
 ]
 
 MIDDLEWARE = [
