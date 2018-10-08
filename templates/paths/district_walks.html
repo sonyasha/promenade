@@ -1,4 +1,4 @@
-{% extends 'paths/base.html' %}
+{% extends 'base.html' %}
 
 {% block title %}
     {{ district.name }} - {{ block.super }}
@@ -15,7 +15,7 @@
         <a href="{% url 'new_walk' district.slug %}" class="btn" style="background-color: rgb(55, 212, 63);">New Walk</a>
     </div>
 
-    <table class="table table-borderless table-hover">
+    <table class="table table-responsive-lg table-borderless table-hover">
         <thead class="table-secondary">
             <tr>
                 <th class="align-middle">Walk Name</th>

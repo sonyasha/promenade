@@ -1,4 +1,6 @@
-{% extends 'paths/base.html' %}
+{% extends 'base.html' %}
+
+
 
 {% block title %}Create new Walk{% endblock %}
 
@@ -9,10 +11,12 @@
 {% endblock %}
 
 {% block content %}
-    <form method="post">
+    <form method="post" novalidate>
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit"/>
-      </form>
+        
+        {% include 'includes/form.html' %}
+        
+        <button type="submit" class="btn btn-success">Submit</button>
+    </form>
 
 {% endblock %}
