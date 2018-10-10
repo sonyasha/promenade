@@ -1,5 +1,4 @@
 from django.contrib.auth.models import User
-# from django.contrib.auth.forms import UserCreationForm
 from django.test import TestCase
 from django.urls import resolve, reverse
 
@@ -39,7 +38,7 @@ class SuccessfulSignUpTests(TestCase):
         url = reverse('signup')
         data = {
             'username': 'eddie',
-            'email': 'email@somemail.com',
+            'email': 'eddie@somemail.com',
             'password1': '321qwe321',
             'password2': '321qwe321'
         }
