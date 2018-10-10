@@ -10,12 +10,12 @@ from paths.forms import NewWalkForm
 from paths.models import Neighborhood, SinglePoint, GeoWalk
 
 def districts(request):
-    districts = Neighborhood.objects.all()
+    districts = Neighborhood.objects.order_by('name')
     return render(request, 'paths/districts.html', {'districts': districts})
 
 def district_walks(request, slug):
     district = get_object_or_404(Neighborhood, slug=slug)
-    walks = GeoWalk.objects.filter(neighborhood=district.id)
+    walks = GeoWalk.objects.filter(neighborhood=district.id).order_by('name', 'created_at')
     return render(request, 'paths/district_walks.html', {'district': district, 'walks': walks})
 
 def new_walk(request, slug):

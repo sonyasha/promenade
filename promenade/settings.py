@@ -134,6 +134,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
+LOGIN_REDIRECT_URL = 'districts'
+LOGOUT_REDIRECT_URL = 'districts'
+
 LEAFLET_CONFIG = {
     # 'SPATIAL_EXTENT': (-77.15, 38.97, -76.9, 38.82),
     'DEFAULT_CENTER': (38.9, -77.03),
