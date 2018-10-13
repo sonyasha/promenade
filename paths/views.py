@@ -35,3 +35,19 @@ def new_walk(request, slug):
         form = NewWalkForm()
     return render(request, 'paths/new_walk.html', {'district': district, 'form': form})
 
+# @login_required
+# def new_walk(request):
+#     districts = Neighborhood.objects.order_by('name')
+#     user = User.objects.first()
+#     if request.method == 'POST':
+#         form = NewWalkForm(request.POST)
+#         if form.is_valid():
+#             walk = form.save(commit=False)
+#             walk.created_by = request.user
+#             walk = form.save()
+#             # print(walk.geom)
+#             return render(request, 'paths/districts.html', {'districts': districts})
+#     else:
+#         form = NewWalkForm()
+#     return render(request, 'paths/new_walk.html', {'form': form})
+

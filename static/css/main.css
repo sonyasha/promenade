@@ -5,3 +5,9 @@ body {
 .breadcrumb-item {
     font-family: 'Niramit', sans-serif;
 }
+
+/* fix it */
+.leaflet-container { 
+    height: 500px;
+    width: 100%;
+}

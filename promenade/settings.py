@@ -137,6 +137,10 @@ STATICFILES_DIRS = [
 LOGIN_REDIRECT_URL = 'districts'
 LOGOUT_REDIRECT_URL = 'districts'
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+LOGIN_URL = 'login'
+
 LEAFLET_CONFIG = {
     # 'SPATIAL_EXTENT': (-77.15, 38.97, -76.9, 38.82),
     'DEFAULT_CENTER': (38.9, -77.03),

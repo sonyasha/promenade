@@ -1,5 +1,6 @@
 {% load static %}
 {% load leaflet_tags %}
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -19,12 +20,15 @@
       <nav class="navbar navbar-expand-lg navbar-dark shadow" style="background-color: rgb(31, 184, 38);">
         <div class="container">
             <a class="navbar-brand" href="{% url 'districts' %}">Promenade</a>
+            <a class="navbar-brand" href="{% url 'map' %}">View Map</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="mainMenu">
               {% if user.is_authenticated %}
                 <ul class="navbar-nav ml-auto">
+                  {% block new_walk %}
+                  {% endblock %}
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       {{ user.username }}
@@ -48,10 +52,12 @@
       </nav>
 
       <div class="container">
-        <ol class="breadcrumb my-4 shadow-sm" style="background-color: rgb(175, 241, 241);">
-          {% block breadcrumb %}
-          {% endblock %}
-        </ol>
+        {% block bread %}
+          <ol class="breadcrumb my-4 shadow-sm" style="background-color: rgb(175, 241, 241);">
+            {% block breadcrumb %}
+            {% endblock %}
+          </ol>
+        {% endblock %}
         {% block content %}
         {% endblock %}
       </div>
@@ -61,5 +67,6 @@
     <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
     <script src="{% static 'js/popper.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    {% block maps_js %} {% endblock %}
   </body>
 </html>

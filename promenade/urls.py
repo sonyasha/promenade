@@ -15,22 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from django.views.generic import TemplateView
 
-from djgeojson.views import GeoJSONLayerView
-from paths.models import GeoWalk, SinglePoint, Neighborhood
-
-
+# from djgeojson.views import GeoJSONLayerView
+# from paths.models import GeoWalk, SinglePoint, Neighborhood
 
 urlpatterns = [
     # path('', views.home, name='home'), #add index page
-    path('districts/', include('paths.urls')),
     path('account/', include('users.urls')),
     path('admin/', admin.site.urls),
-    path('map/', TemplateView.as_view(template_name='paths/map.html'), name='map'),
-    path('mapdata/', GeoJSONLayerView.as_view(model=GeoWalk, properties=('name', 'description', 'picture_url')), name='mapdata'),
-    path('pointsdata/', GeoJSONLayerView.as_view(model=SinglePoint, properties=('name')), name='pointsdata'),
-    path('neighborhoodsdata/', GeoJSONLayerView.as_view(model=Neighborhood, properties=('name')), name='neighborhoodsdata'),
+    path('districts/', include('paths.urls')),
+    path('map/', include('maps.urls')),
     
 ]
 

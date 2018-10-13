@@ -4,6 +4,12 @@
     {{ district.name }} - {{ block.super }}
 {% endblock %}
 
+{% block new_walk %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'new_walk' district.slug %}">New Walk</a>
+    </li>
+{% endblock %}
+
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'districts' %}">Districts</a></li>
     <li class="breadcrumb-item active">{{ district.name }}</li>
@@ -11,9 +17,9 @@
 
 {% block content %}
 
-    <div class="mb-4">
+    <!-- <div class="mb-4">
         <a href="{% url 'new_walk' district.slug %}" class="btn" style="background-color: rgb(55, 212, 63);">New Walk</a>
-    </div>
+    </div> -->
 
     <table class="table table-responsive-lg table-borderless table-hover">
         <thead class="table-secondary">

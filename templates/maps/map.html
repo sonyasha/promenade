@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+<!-- {% load leaflet_tags %} -->
+<!-- {% load static %} -->
+
+{% block stylesheet %}
+  <script type="text/javascript">
+    var urlsdata = ['{% url "mapdata" %}', '{% url "pointsdata" %}', '{% url "neighborhoodsdata" %}'];
+  </script>
+{% endblock %}
+
+{% block bread %}
+  <ol></ol>
+{% endblock %}
+
+{% block content %}
+  <div class="container-fluid">
+    {% leaflet_map "fullmap" %}
+  </div>
+{% endblock %}
+
+{% block maps_js %}
+  <script src="{% static 'js/map.js' %}"></script>
+{% endblock %}
