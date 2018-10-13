@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.http import Http404
 from django import template
 from django.template.loader import render_to_string
+from django.contrib.auth.decorators import login_required
 # from datetime import datetime
 
 from paths.forms import NewWalkForm
@@ -18,6 +19,7 @@ def district_walks(request, slug):
     walks = GeoWalk.objects.filter(neighborhood=district.id).order_by('name', 'created_at')
     return render(request, 'paths/district_walks.html', {'district': district, 'walks': walks})
 
+@login_required
 def new_walk(request, slug):
     district = get_object_or_404(Neighborhood, slug=slug)
     user = User.objects.first()
@@ -25,7 +27,7 @@ def new_walk(request, slug):
         form = NewWalkForm(request.POST)
         if form.is_valid():
             walk = form.save(commit=False)
-            walk.created_by = user
+            walk.created_by = request.user
             walk = form.save()
             print(walk.geom)
             return redirect('district_walks', slug=district.slug)

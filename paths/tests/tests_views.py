@@ -50,7 +50,15 @@ class DistrictWalks(TestCase):
         self.assertContains(response, f'href="{districtpage_url}"')
         self.assertContains(response, f'href="{new_walk_url}"')
 
+class LoginRequiredNewTopicTests(TestCase):
+    def setUp(self):
+        Neighborhood.objects.create(name='New District', geom={"type":"Polygon","coordinates":[[[-77.01756772064958,38.91401270588173],[-77.01644470054677,38.91424038031397],[-76.99067731309495,38.922984764482244],[-76.98540374355869,38.924580016568626],[-76.97739424316825,38.92868609733962],[-76.96349549748187,38.93524604773688],[-76.94444549114694,38.92048790701407],[-76.92194803559413,38.90284934024322],[-76.90933249357992,38.89286541446984],[-76.93364414255991,38.8738697573288],[-76.9397293611171,38.86900263036611],[-76.94679115896449,38.86372632259586],[-76.97374316347495,38.87502874727069],[-76.97930398849596,38.87760402017108],[-76.98457323322508,38.87668958008691],[-76.99115938635487,38.877262298349606],[-77.00057888424202,38.879705979067644],[-77.00065656095119,38.89393184234142],[-77.00072936169909,38.90725964554979],[-77.00446847513915,38.90898444277938],[-77.01186560306972,38.906123769661235],[-77.01201832579397,38.90731548571515],[-77.01392489176823,38.907374860628515],[-77.01618207078499,38.911487978320864],[-77.01756772064958,38.91401270588173]]]}, slug='newdistr')
+        self.url = reverse('new_walk', kwargs={'slug': 'newdistr'})
+        self.response = self.client.get(self.url)
 
+    def test_redirection(self):
+        login_url = reverse('login')
+        self.assertRedirects(self.response, '{login_url}?next={url}'.format(login_url=login_url, url=self.url))
 
 class NewWalkTests(TestCase):
     def setUp(self):
@@ -123,3 +131,4 @@ class NewWalkTests(TestCase):
         response = self.client.get(url)
         form = response.context.get('form')
         self.assertIsInstance(form, NewWalkForm)
+
