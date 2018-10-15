@@ -38,16 +38,16 @@ class SinglePoint(models.Model):
     def __str__(self):
         return self.name
 
-    def add_neighborhood(self):
-        if not self.checked:
-            for n in Neighborhood.objects.all():
-                polygon = Polygon(*(n.geom['coordinates']))
-                point = Point(*(self.geom['coordinates']))
-                if polygon.contains(point):
-                    self.neighborhood = n
-                    self.checked = True
-                    self.save()
-                    break
+    # def add_neighborhood(self):
+    #     if not self.checked:
+    #         for n in Neighborhood.objects.all():
+    #             polygon = Polygon(*(n.geom['coordinates']))
+    #             point = Point(*(self.geom['coordinates']))
+    #             if polygon.contains(point):
+    #                 self.neighborhood = n
+    #                 self.checked = True
+    #                 self.save()
+    #                 break
         
 
 class GeoWalk(models.Model):
@@ -67,17 +67,17 @@ class GeoWalk(models.Model):
     duration_in_seconds = models.IntegerField(validators=[MaxValueValidator(86400)], null=True, blank=True)
     duration_text = models.CharField(max_length=100, null=True, blank=True)
 
-    def add_neighborhoods(self):
-        if not self.checked:
-            for n in Neighborhood.objects.all():
-                polygon = Polygon(*(n.geom['coordinates']))
-                for coord_pair in self.geom['coordinates']:
-                    point = Point(coord_pair)
-                    if polygon.contains(point):
-                        self.neighborhood.add(n)
-                        self.checked = True
-                        self.save()
-                        break
+    # def add_neighborhoods(self):
+    #     if not self.checked:
+    #         for n in Neighborhood.objects.all():
+    #             polygon = Polygon(*(n.geom['coordinates']))
+    #             for coord_pair in self.geom['coordinates']:
+    #                 point = Point(coord_pair)
+    #                 if polygon.contains(point):
+    #                     self.neighborhood.add(n)
+    #                     self.checked = True
+    #                     self.save()
+    #                     break
 
     def find_length_duration(self):
         if not self.length_in_meters:
