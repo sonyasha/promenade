@@ -66,6 +66,8 @@ class NewWalkTests(TestCase):
         User.objects.create_user(username='john', email='john@doe.com', password='123')
         self.client.login(username='john', password='123')
 
+    
+
     def test_new_walk_view_success_status_code(self):
         url = reverse('new_walk', kwargs={'slug': 'newdistr'})
         response = self.client.get(url)
@@ -133,3 +135,17 @@ class NewWalkTests(TestCase):
         form = response.context.get('form')
         self.assertIsInstance(form, NewWalkForm)
 
+class GeoWalkSlugTest(TestCase):
+    def setUp(self):
+        user = User.objects.create_user(username='john', email='john@doe.com', password='123')
+        self.client.login(username='john', password='123')
+        GeoWalk.objects.create(name='New walk', description='Lorem ipsum dolor sit amet', geom={'type': 'LineString', 'coordinates': [[-77.023013, 38.023586], [-77.053453, 38.043313], [-77.025013, 38.027586]]}, created_by=user)
+        GeoWalk.objects.create(name='New walk', description='2Lorem ipsum dolor sit amet', geom={'type': 'LineString', 'coordinates': [[-77.033013, 38.033586], [-77.093453, 38.073313], [-77.025013, 38.027586]]}, created_by=user)
+        
+
+    def test_check_slug_unique(self):
+        walk_1 = GeoWalk.objects.get(pk=1)
+        walk_2 = GeoWalk.objects.get(pk=2)
+
+        self.assertEqual(walk_1.slug, 'new-walk')
+        self.assertEqual(walk_2.slug, 'new-walk-2')
