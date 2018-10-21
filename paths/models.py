@@ -8,12 +8,13 @@ import googlemaps
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator
+from django.db.models.signals import pre_save
 
 from promenade.utils import unique_slug_generator
-from paths.google_maps_key import gm_key
+# from paths.google_maps_key import gm_key
 
-# from promenade.utils import define_neighborhood_single_point
 # from django.utils.text import slugify
+
 
 
 class Neighborhood(models.Model):
@@ -60,12 +61,18 @@ class GeoWalk(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     checked = models.BooleanField(null=True)
+    slug = models.SlugField(max_length=70, unique=True)
 
     neighborhood = models.ManyToManyField(Neighborhood, blank=True)
     length_in_meters = models.IntegerField(validators=[MaxValueValidator(20000)], null=True, blank=True)
     length_text = models.CharField(max_length=100, null=True, blank=True)
     duration_in_seconds = models.IntegerField(validators=[MaxValueValidator(86400)], null=True, blank=True)
     duration_text = models.CharField(max_length=100, null=True, blank=True)
+
+    # def save(self, *args, **kwargs):
+    #     if not self.slug:
+    #         self.slug = unique_slug_generator(self, self.name, self.slug)
+    #     super().save(*args, **kwargs)
 
     # def add_neighborhoods(self):
     #     if not self.checked:
@@ -79,27 +86,33 @@ class GeoWalk(models.Model):
     #                     self.save()
     #                     break
 
-    def find_length_duration(self):
-        if not self.length_in_meters:
-            gmaps = googlemaps.Client(key=gm_key)
-            start = f'{self.geom["coordinates"][0][0][1]}, {self.geom["coordinates"][0][0][0]}'
-            end = f'{self.geom["coordinates"][0][-1][1]}, {self.geom["coordinates"][0][-1][0]}'
-            try:
-                results = gmaps.distance_matrix(f'{start}, {end}', mode="walking")
-                if results:
-                    try:
-                        self.length_in_meters = results['rows'][0]['elements'][0]['distance']['value']
-                        self.length_text = results['rows'][0]['elements'][0]['distance']['text']
-                        self.duration_in_seconds = results['rows'][0]['elements'][0]['duration']['value']
-                        self.duration_text = results['rows'][0]['elements'][0]['duration']['text']
-                        self.save()
-                    except:
-                        print('the walk is too long')
-            except:
-                print('limit is over')               
+    # def find_length_duration(self):
+    #     if not self.length_in_meters:
+    #         gmaps = googlemaps.Client(key=gm_key)
+    #         start = f'{self.geom["coordinates"][0][0][1]}, {self.geom["coordinates"][0][0][0]}'
+    #         end = f'{self.geom["coordinates"][0][-1][1]}, {self.geom["coordinates"][0][-1][0]}'
+    #         try:
+    #             results = gmaps.distance_matrix(f'{start}, {end}', mode="walking")
+    #             if results:
+    #                 try:
+    #                     self.length_in_meters = results['rows'][0]['elements'][0]['distance']['value']
+    #                     self.length_text = results['rows'][0]['elements'][0]['distance']['text']
+    #                     self.duration_in_seconds = results['rows'][0]['elements'][0]['duration']['value']
+    #                     self.duration_text = results['rows'][0]['elements'][0]['duration']['text']
+    #                     self.save()
+    #                 except:
+    #                     print('the walk is too long')
+    #         except:
+    #             print('limit is over')               
 
     def __str__(self):
         return self.name
+
+def slug_save(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = unique_slug_generator(instance, instance.name, instance.slug)
+
+pre_save.connect(slug_save, sender=GeoWalk)
 
 # class District(models.Model):
 #     name = models.CharField(unique=True, max_length=50)
