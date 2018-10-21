@@ -34,9 +34,4 @@ class MapDataUrlsTests(TestCase):
 
     def test_map_container_renders(self):
         self.assertContains(self.response, '<div id="fullmap"',1)
-
     
-
-    
-
-
