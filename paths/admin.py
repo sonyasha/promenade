@@ -8,6 +8,8 @@ from .models import SinglePoint, GeoWalk, Neighborhood
 
 
 class NewLeafletGeoAdmin(LeafletGeoAdmin):
+    map_height = '550px'
+
     list_display = ['name', 'created_by', 'created_at', 'checked']
     actions = ['add_neighborhood', ]
 
