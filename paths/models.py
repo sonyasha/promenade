@@ -28,11 +28,12 @@ class Neighborhood(models.Model):
 
 class SinglePoint(models.Model):
     ''' A single point that can be placed on a map '''
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=70)
     geom = PointField()
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     checked = models.BooleanField(null=True)
+    slug = models.SlugField(max_length=90, unique=True)
 
     neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, null=True, blank=True)
 
@@ -113,6 +114,7 @@ def slug_save(sender, instance, *args, **kwargs):
         instance.slug = unique_slug_generator(instance, instance.name, instance.slug)
 
 pre_save.connect(slug_save, sender=GeoWalk)
+pre_save.connect(slug_save, sender=SinglePoint)
 
 # class District(models.Model):
 #     name = models.CharField(unique=True, max_length=50)
