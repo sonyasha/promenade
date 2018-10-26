@@ -33,7 +33,7 @@
         <tbody>
             {% for w in walks %}
                 <tr class="align-middle">
-                    <td class="align-middle">{{w.name}}</td>
+                    <td><a href="{% url 'single_walk' district.slug w.slug %}">{{ w.name }}</a></td>
                     <td>{{w.length_text}}</td>
                     <td>{{w.duration_text}}</td>
                     <td class="align-middle">{{w.created_at}}</td>
