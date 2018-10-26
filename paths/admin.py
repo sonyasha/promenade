@@ -4,7 +4,7 @@ from django.contrib import admin
 from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
 
-from .models import SinglePoint, GeoWalk, Neighborhood
+from .models import SinglePoint, GeoWalk, Neighborhood, WalkComment
 
 
 class NewLeafletGeoAdmin(LeafletGeoAdmin):
@@ -38,4 +38,5 @@ class NewLeafletGeoAdmin(LeafletGeoAdmin):
 admin.site.register(GeoWalk, NewLeafletGeoAdmin)
 admin.site.register(SinglePoint, NewLeafletGeoAdmin)
 admin.site.register(Neighborhood, LeafletGeoAdmin)
+admin.site.register(WalkComment)
 

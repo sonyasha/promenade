@@ -39,17 +39,6 @@ class SinglePoint(models.Model):
 
     def __str__(self):
         return self.name
-
-    # def add_neighborhood(self):
-    #     if not self.checked:
-    #         for n in Neighborhood.objects.all():
-    #             polygon = Polygon(*(n.geom['coordinates']))
-    #             point = Point(*(self.geom['coordinates']))
-    #             if polygon.contains(point):
-    #                 self.neighborhood = n
-    #                 self.checked = True
-    #                 self.save()
-    #                 break
         
 
 class GeoWalk(models.Model):
@@ -75,17 +64,6 @@ class GeoWalk(models.Model):
     #         self.slug = unique_slug_generator(self, self.name, self.slug)
     #     super().save(*args, **kwargs)
 
-    # def add_neighborhoods(self):
-    #     if not self.checked:
-    #         for n in Neighborhood.objects.all():
-    #             polygon = Polygon(*(n.geom['coordinates']))
-    #             for coord_pair in self.geom['coordinates']:
-    #                 point = Point(coord_pair)
-    #                 if polygon.contains(point):
-    #                     self.neighborhood.add(n)
-    #                     self.checked = True
-    #                     self.save()
-    #                     break
 
     # def find_length_duration(self):
     #     if not self.length_in_meters:
@@ -116,30 +94,14 @@ def slug_save(sender, instance, *args, **kwargs):
 pre_save.connect(slug_save, sender=GeoWalk)
 pre_save.connect(slug_save, sender=SinglePoint)
 
-# class District(models.Model):
-#     name = models.CharField(unique=True, max_length=50)
-#     slug = models.SlugField(max_length=50, unique=True)
 
-#     def __str__(self):
-#         return self.name
-
-#     def save(self, *args, **kwargs):
-#         if not self.slug:
-#             self.slug = unique_slug_generator(self, self.name, self.slug)
-#         super().save(*args, **kwargs)
-
-# class Subdistrict(models.Model):
-#     name = models.CharField(unique=True, max_length=50)
-#     district = models.ManyToManyField(District)
-#     slug = models.SlugField(max_length=50, unique=True)
-
-#     def save(self, *args, **kwargs):
-#         if not self.slug:
-#             self.slug = unique_slug_generator(self, self.name, self.slug)
-#         super().save(*args, **kwargs)
-    
-#     def __str__(self):
-#         return self.name
+class WalkComment(models.Model):
+    message = models.TextField(max_length=2000)
+    walk = models.ForeignKey(GeoWalk, related_name='walks', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, related_name='walks', on_delete=models.CASCADE)
+    updated_at = models.DateTimeField(null=True)
+    updated_by = models.ForeignKey(User, null=True, related_name='+', on_delete=models.CASCADE)
 
 # class Walk(models.Model):
 #     name = models.CharField(unique=True, max_length=50, help_text='Enter a name for your Walk (e.g. Southeast Treasure)')
@@ -166,11 +128,7 @@ pre_save.connect(slug_save, sender=SinglePoint)
     #     """Returns the url to access a particular instance of the model."""
     #     return reverse('walk-detail-view', args=[str(self.id)])
 
-# class Comment(models.Model):
-#     message = models.TextField(max_length=2000)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
-#     updated_at = models.DateTimeField(null=True)
+
 
 
 
