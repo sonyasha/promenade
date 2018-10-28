@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 <!-- {% load static %} -->
+<!-- {% load leaflet_tags %} -->
+
+{% block stylesheet %}
+  <script type="text/javascript">
+    var urlsdata = ['{% url "mapdata" %}']; // change in paths
+  </script>
+{% endblock %}
 
 {% block title %}{{ walk.name }}{% endblock %}
 
@@ -11,37 +18,49 @@
 
 {% block content %}
 
+<div class="container-fluid">
+    {% leaflet_map "singlemap" %}
+</div>
+
 <div class="mb-4">
     <a href="#" class="btn btn-success" role="button">Reply</a>
 </div>
 
+<div>
+
+</div>
+
 {% for comment in walk.walks.all %}
     <div class="card mb-2">
-      <div class="card-body p-3">
-        <div class="row">
-          <div class="col-2">
-            <img src="{% static 'img/avatar.svg' %}" alt="{{ comment.created_by.username }}" class="w-100">
-            <small>Comments: {{ comment.created_by.walks.count }}</small>
-          </div>
-          <div class="col-10">
-            <div class="row mb-3">
-              <div class="col-6">
-                <strong class="text-muted">{{ comment.created_by.username }}</strong>
-              </div>
-              <div class="col-6 text-right">
-                <small class="text-muted">{{ comment.created_at }}</small>
-              </div>
+        <div class="card-body p-3">
+            <div class="row">
+                <div class="col-2">
+                    <img src="{% static 'img/avatar.svg' %}" alt="{{ comment.created_by.username }}" class="w-100">
+                    <small>Comments: {{ comment.created_by.walks.count }}</small>
+                </div>
+                <div class="col-10">
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <strong class="text-muted">{{ comment.created_by.username }}</strong>
+                        </div>
+                        <div class="col-6 text-right">
+                            <small class="text-muted">{{ comment.created_at }}</small>
+                        </div>
+                    </div>
+                    {{ comment.message }}
+                    {% if comment.created_by == user %}
+                        <div class="mt-3">
+                            <a href="#" class="btn btn-success btn-sm" role="button">Edit</a>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
-            {{ comment.message }}
-            {% if comment.created_by == user %}
-              <div class="mt-3">
-                <a href="#" class="btn btn-success btn-sm" role="button">Edit</a>
-              </div>
-            {% endif %}
-          </div>
         </div>
-      </div>
     </div>
-  {% endfor %}
+{% endfor %}
 
+{% endblock %}
+
+{% block maps_js %}
+  <script src="{% static 'js/map.js' %}"></script>
 {% endblock %}

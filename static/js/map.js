@@ -24,6 +24,26 @@ window.addEventListener("map:init", function (event) {
         }}).addTo(map);
         });
     });
+});
+
+// window.addEventListener("map:init", function (event) {
+//     var map = event.detail.map;
+//     // Download GeoJSON data with Ajax
+//     path_data.forEach(el => {
+//         fetch(el)
+//         .then(function(resp) {
+//         return resp.json();
+//         })
+//         .then(function(data) {
+//             L.geoJson(data, {
+//             onEachFeature: function onEachFeature(feature, layer) {
+//             var props = feature.properties;
+//             var content = `<h3>${props.name}</h3>`;
+//             layer.bindPopup(content);
+//         }}).addTo(map);
+//         });
+//     });
+// });
 
 // fetch(neighburl)
 //     .then(function(resp) {
@@ -63,4 +83,4 @@ window.addEventListener("map:init", function (event) {
 //             layer.bindPopup(content);
 //         }}).addTo(map);
 //     });  
-});
+
